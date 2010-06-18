@@ -47,6 +47,9 @@ label {
     margin-top: 2em;
     margin-bottom: 1em;
   }
+    #box_label {
+      width: 650px;
+    }
     #picker {
       margin: 0 1em 0 1em;
     }

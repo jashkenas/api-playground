@@ -4,10 +4,6 @@
   <title>API Playground</title>
   <link rel="stylesheet" href="/public/css/reset.css" />
   <link rel="stylesheet" href="/public/css/api.css" />
-  <script src="/public/js/jquery-1.3.2.js"></script>
-  <script src="/public/js/underscore-1.0.2.js"></script>
-  <script src="/public/js/api.js"></script>
-  <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 </head>
 <body>
   <div id="container">
@@ -18,11 +14,27 @@
       Helping journalists understand, browse and toy with API data.
     </h2>
 
-    <p class="intro">
+    <p>
       Huge amounts of data are available online via APIs, but often in forms that
       aren't viewable by non-technical folks (like many journalists). This tool
       helps browse these data sets to make it easier to imagine ways to turn
       data into stories.
+    </p>
+    
+    <p>
+      <a href="#" onclick="$('#explanation').show();">What exactly is an API?</a>
+    </p>
+    
+    <p id="explanation" style="display:none;">
+      <b>API</b> stands for "Application Programming Interface." 
+      Often, an API is a way to get content from one website 
+      (say, the New York Times, or Flickr) onto another (say next to your article) 
+      automatically, without copying and pasting. A way to do that is by 
+      feeding the API the text of your article or its keywords, and seeing what 
+      related content you get back. It's also a way of building applications 
+      such as iPhone apps, with other websites' content. For more information
+      on APIs, read the 
+      <a href="http://en.wikipedia.org/wiki/Api">Wikipedia entry</a>.
     </p>
 
     <div id="controls">
@@ -56,5 +68,11 @@
     <div id="results"></div>
 
   </div>
+
+  <script src="/public/js/jquery-1.3.2.js"></script>
+  <script src="/public/js/underscore-1.0.2.js"></script>
+  <script src="/public/js/api.js"></script>
+  <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+
 </body>
 </html>
