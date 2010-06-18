@@ -1,7 +1,7 @@
 window.API: {
 
   services : {
-    zemanta       : {box: 'Enter a block of text:', description: 'Zemanta is a service that finds names, locations, photos, links and other material based on a raw chunk of text.', mode : 'text'},
+    zemanta       : {box: 'Enter a block of text:', description: 'Zemanta is a service that finds names, locations, photos, links and other material based on a raw chunk of text. Try pasting in part of an article.', mode : 'text'},
     truveo        : {box: 'Enter video keywords:', description: 'Truveo is a huge database of online videos.', mode : 'line'},
     opencongress  : {box: 'Enter the last name of a Member of Congress:', description: 'A general resource on Congress, produced by the Participatory Politics Foundation and the Sunlight Foundation.', mode : 'line'},
     guardian      : {box: 'Enter anything that might appear in a story:', description: 'This API lets you mine The Guardian\'s article database.', mode : 'line'},

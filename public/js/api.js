@@ -3,7 +3,7 @@
     services: {
       zemanta: {
         box: 'Enter a block of text:',
-        description: 'Zemanta is a service that finds names, locations, photos, links and other material based on a raw chunk of text.',
+        description: 'Zemanta is a service that finds names, locations, photos, links and other material based on a raw chunk of text. Try pasting in part of an article.',
         mode: 'text'
       },
       truveo: {
