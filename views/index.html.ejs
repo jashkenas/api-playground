@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>API Playground</title>
+  <link rel="stylesheet" href="/public/css/reset.css" />
+  <link rel="stylesheet" href="/public/css/api.css" />
+  <script src="/public/js/jquery-1.3.2.js"></script>
+  <script src="/public/js/underscore-1.0.2.js"></script>
+  <script src="/public/js/api.js"></script>
+</head>
+<body>
+  <div id="container">
+
+    <img id="logo" alt="The API Playground" src="/public/images/logo.png" width="550" height="199" />
+
+    <h2>
+      Helping journalists understand, browse and toy with API data.
+    </h2>
+
+    <p class="intro">
+      Huge amounts of data are available online via APIs, but often in forms that
+      aren't viewable by non-technical folks (like many journalists). This tool
+      helps browse these data sets to make it easier to imagine ways to turn 
+      data into stories.
+    </p>
+    
+    <div id="controls">
+      <label for="picker">
+        API:
+      </label>
+      <select id="picker">
+        <option value="guardian">The Guardian</option>
+        <option value="zemanta">Zemanta</option>
+        <option value="opencongress">OpenCongress</option>
+        <option value="truveo">Truveo</option>
+        <option value="oilreporter">Oil Reporter</option>
+        <option value="twitter">Twitter</option>
+      </select>
+      <img src="/public/images/spinner.gif" id="spinner" style="display:none;" />
+    </div>
+
+    <p id="description"></p>
+
+    <div id="box_label"></div>
+
+    <div id="text_container">
+      <textarea id="text"></textarea>
+      <input type="text" id="line" />
+    </div>
+
+    <div id="go" class="minibutton">Search the API</div>
+    <br class="clear" />
+
+    <div id="results"></div>
+
+  </div>
+</body>
+</html>
