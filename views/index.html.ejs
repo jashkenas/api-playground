@@ -7,6 +7,7 @@
   <script src="/public/js/jquery-1.3.2.js"></script>
   <script src="/public/js/underscore-1.0.2.js"></script>
   <script src="/public/js/api.js"></script>
+  <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 </head>
 <body>
   <div id="container">
@@ -20,10 +21,10 @@
     <p class="intro">
       Huge amounts of data are available online via APIs, but often in forms that
       aren't viewable by non-technical folks (like many journalists). This tool
-      helps browse these data sets to make it easier to imagine ways to turn 
+      helps browse these data sets to make it easier to imagine ways to turn
       data into stories.
     </p>
-    
+
     <div id="controls">
       <label for="picker">
         API:
@@ -33,6 +34,7 @@
         <option value="zemanta">Zemanta</option>
         <option value="opencongress">OpenCongress</option>
         <option value="truveo">Truveo</option>
+        <option value="googlemaps">Google Maps</option>
         <option value="oilreporter">Oil Reporter</option>
         <option value="twitter">Twitter</option>
       </select>

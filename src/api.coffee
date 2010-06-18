@@ -1,12 +1,13 @@
 window.API: {
 
   services : {
-    zemanta       : {box: 'Enter a block of text:', description: 'Zemanta is a service that finds names, locations, photos, links and other material based on a raw chunk of text. Try pasting in part of an article.', mode : 'text'},
-    truveo        : {box: 'Enter video keywords:', description: 'Truveo is a huge database of online videos.', mode : 'line'},
-    opencongress  : {box: 'Enter the last name of a Member of Congress:', description: 'A general resource on Congress, produced by the Participatory Politics Foundation and the Sunlight Foundation.', mode : 'line'},
-    guardian      : {box: 'Enter anything that might appear in a story:', description: 'This API lets you mine The Guardian\'s article database.', mode : 'line'},
-    oilreporter   : {box: '', description :'Oil Reporter is a new effort to crowdsource oil sightings along the Gulf coast.', mode : 'none'},
+    zemanta       : {box: 'Enter a block of text:', description: 'Zemanta is a service that finds names, locations, photos, links and other material based on a raw chunk of text. Try pasting in part of an article.', mode : 'text'}
+    truveo        : {box: 'Enter video keywords:', description: 'Truveo is a huge database of online videos.', mode : 'line'}
+    opencongress  : {box: 'Enter the last name of a Member of Congress:', description: 'A general resource on Congress, produced by the Participatory Politics Foundation and the Sunlight Foundation.', mode : 'line'}
+    guardian      : {box: 'Enter anything that might appear in a story:', description: 'This API lets you mine The Guardian\'s article database.', mode : 'line'}
+    oilreporter   : {box: '', description :'Oil Reporter is a new effort to crowdsource oil sightings along the Gulf coast.', mode : 'none'}
     twitter       : {box: 'Enter something to search for on Twitter:', description: 'How might you mine the Twitterverse? With Twitter\'s API.', mode : 'line'}
+    googlemaps    : {box: 'Enter a location to get a map:', description: 'The Google Maps API is one of the oldest and most widely used APIs in existence.', mode : 'gmaps line', custom : yes}
   }
 
   initialize: ->
@@ -26,8 +27,9 @@ window.API: {
     API.getInput().focus()
 
   go: ->
-    api: $('#picker').val()
-    API.fetch api, API.getInput().val()
+    api:  $('#picker').val()
+    text: API.getInput().val()
+    if API.services[api].custom then API[api](text) else API.fetch api, text
 
   getInput: ->
     if API.current.mode is 'text' then $('#text') else $('#line')
@@ -38,6 +40,19 @@ window.API: {
   fetch: (api, value) ->
     $.getJSON "/api/${api}.json", {text: value}, API["${api}Complete"]
     $('#spinner').show()
+
+  googlemaps: (text) ->
+    geocoder: new google.maps.Geocoder()
+    latlng:   new google.maps.LatLng(-34.397, 150.644)
+    options:  {zoom: 13, center: latlng, mapTypeId: google.maps.MapTypeId.SATELLITE}
+    map:      new google.maps.Map $('#results')[0], options
+    geocoder.geocode {address : text}, (results, status) ->
+      if status is google.maps.GeocoderStatus.OK
+        loc: results[0].geometry.location
+        map.setCenter loc
+        new google.maps.Marker {map: map, position: loc}
+      else
+        alert "Geocode was not successful for the following reason: $status"
 
   zemantaComplete: (response) ->
     $('#spinner').hide()

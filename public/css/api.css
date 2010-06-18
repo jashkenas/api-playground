@@ -65,11 +65,13 @@ label {
       display: none;
     }
   #results {
-
+    margin: 2em 0 0 0;
   }
+    body.gmaps #results {
+      height: 400px;
+    }
     #results table {
       width: 100%;
-      margin: 2em 0 0 0;
       font-size: 0.8em;
       line-height: 1.4em;
       border-left: 1px solid #C1DAD7;

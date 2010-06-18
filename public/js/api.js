@@ -30,6 +30,12 @@
         box: 'Enter something to search for on Twitter:',
         description: 'How might you mine the Twitterverse? With Twitter\'s API.',
         mode: 'line'
+      },
+      googlemaps: {
+        box: 'Enter a location to get a map:',
+        description: 'The Google Maps API is one of the oldest and most widely used APIs in existence.',
+        mode: 'gmaps line',
+        custom: true
       }
     },
     initialize: function() {
@@ -54,9 +60,14 @@
       return API.getInput().focus();
     },
     go: function() {
-      var api;
+      var api, text;
       api = $('#picker').val();
-      return API.fetch(api, API.getInput().val());
+      text = API.getInput().val();
+      if (API.services[api].custom) {
+        return API[api](text);
+      } else {
+        return API.fetch(api, text);
+      }
     },
     getInput: function() {
       if (API.current.mode === 'text') {
@@ -73,6 +84,32 @@
         text: value
       }, API[("" + (api) + "Complete")]);
       return $('#spinner').show();
+    },
+    googlemaps: function(text) {
+      var geocoder, latlng, map, options;
+      geocoder = new google.maps.Geocoder();
+      latlng = new google.maps.LatLng(-34.397, 150.644);
+      options = {
+        zoom: 13,
+        center: latlng,
+        mapTypeId: google.maps.MapTypeId.SATELLITE
+      };
+      map = new google.maps.Map($('#results')[0], options);
+      return geocoder.geocode({
+        address: text
+      }, function(results, status) {
+        var loc;
+        if (status === google.maps.GeocoderStatus.OK) {
+          loc = results[0].geometry.location;
+          map.setCenter(loc);
+          return new google.maps.Marker({
+            map: map,
+            position: loc
+          });
+        } else {
+          return alert(("Geocode was not successful for the following reason: " + status));
+        }
+      });
     },
     zemantaComplete: function(response) {
       var articles, images, keywords;
