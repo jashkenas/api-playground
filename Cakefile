@@ -2,8 +2,10 @@
 {spawn, exec}: require 'child_process'
 
 task 'build', 'Build and watch the CoffeeScript source files', ->
-  coffee: spawn 'coffee', ['-cw', '-o', 'lib', 'src']
-  coffee.stdout.addListener 'data', (data) -> print data.toString()
+  backend: spawn 'coffee', ['-cw', '-o', 'lib', 'src/app.coffee']
+  backend.stdout.addListener 'data', (data) -> print data.toString()
+  frontend: spawn 'coffee', ['-cw', '-o', 'public/js', 'src/api.coffee']
+  frontend.stdout.addListener 'data', (data) -> print data
 
 task 'deploy', 'Deploy to Linode', ->
   exec "rsync -av --progress --inplace --rsh='ssh -p9977' . jashkenas@ashkenas.com:/home/jashkenas/sites/api_playground", (err, stdout) ->

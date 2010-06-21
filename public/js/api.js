@@ -148,6 +148,9 @@
     truveoComplete: function(response) {
       var videos;
       $('#spinner').hide();
+      if (!(response.response.data.results.videoSet.videos)) {
+        return alert('No related videos were found.');
+      }
       videos = {
         title: "Videos",
         headers: ["Title", "Channel", "Description", "Video"],
@@ -162,6 +165,9 @@
     opencongressComplete: function(response) {
       var articles, news, people;
       $('#spinner').hide();
+      if (!(response.people)) {
+        return alert("No member of Congress by that name could be found.");
+      }
       people = {
         title: "Members of Congress",
         headers: ["Name", "Website", "Phone", "Office", "Religion"],
@@ -196,6 +202,9 @@
     guardianComplete: function(response) {
       var articles;
       $('#spinner').hide();
+      if (!(response.response.results.length)) {
+        return alert("No related articles were found.");
+      }
       articles = {
         title: "Articles",
         headers: ["Title", "Section", "Excerpt", "Link"],

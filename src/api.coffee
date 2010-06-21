@@ -79,6 +79,7 @@ window.API: {
 
   truveoComplete: (response) ->
     $('#spinner').hide()
+    return alert 'No related videos were found.' unless response.response.data.results.videoSet.videos
     videos: {
       title   : "Videos"
       headers : ["Title", "Channel", "Description", "Video"]
@@ -89,6 +90,7 @@ window.API: {
 
   opencongressComplete: (response) ->
     $('#spinner').hide()
+    return alert "No member of Congress by that name could be found." unless response.people
     people: {
       title   : "Members of Congress"
       headers : ["Name", "Website", "Phone", "Office", "Religion"]
@@ -106,6 +108,7 @@ window.API: {
 
   guardianComplete: (response) ->
     $('#spinner').hide()
+    return alert "No related articles were found." unless response.response.results.length
     articles: {
       title   : "Articles"
       headers : ["Title", "Section", "Excerpt", "Link"]
