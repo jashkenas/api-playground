@@ -70,7 +70,7 @@ label {
   #results {
     margin: 2em 0 0 0;
   }
-    body.gmaps #results {
+    #map {
       height: 400px;
     }
     #results table {
@@ -82,10 +82,11 @@ label {
       #results th {
         font-weight: bold;
         color: #333;
-        border-right: 1px solid #C1DAD7;
-        border-bottom: 1px solid #C1DAD7;
-        border-top: 1px solid #C1DAD7;
-        background: #daf0f0;
+        border: 1px solid #d0d0d0;
+        border-left: 0;
+        background: #d7d7d7;
+        background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#d0d0d0));
+        background: -moz-linear-gradient(top, #ffffff, #d0d0d0);
         padding: 6px 6px 6px 12px;
       }
       #results td {

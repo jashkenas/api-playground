@@ -42,10 +42,11 @@ window.API: {
     $('#spinner').show()
 
   googlemaps: (text) ->
+    $('#results').html '<div id="map"></div>'
     geocoder: new google.maps.Geocoder()
     latlng:   new google.maps.LatLng(-34.397, 150.644)
     options:  {zoom: 13, center: latlng, mapTypeId: google.maps.MapTypeId.SATELLITE}
-    map:      new google.maps.Map $('#results')[0], options
+    map:      new google.maps.Map $('#map')[0], options
     geocoder.geocode {address : text}, (results, status) ->
       if status is google.maps.GeocoderStatus.OK
         loc: results[0].geometry.location

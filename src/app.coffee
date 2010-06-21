@@ -4,9 +4,12 @@ path: require 'path'
 sys:  require 'sys'
 fs:   require 'fs'
 
+root_dir: path.normalize __dirname + '/..'
+
 configure ->
   use Static
-  set 'root', path.normalize __dirname + '/..'
+  use Logger
+  set 'root', root_dir
 
 urls: {
   zemanta      : "http://api.zemanta.com/services/rest/0.0"
@@ -17,7 +20,7 @@ urls: {
   twitter      : "http://search.twitter.com/search.json"
 }
 
-keys: JSON.parse fs.readFileSync('./config/keys.json').toString()
+keys: JSON.parse fs.readFileSync(root_dir + '/config/keys.json').toString()
 
 get '/', ->
   @render 'index.html.ejs', {layout: no}
@@ -69,12 +72,13 @@ get '/api/oilreporter.json', ->
 
 respond: (request) ->
   (err, body, response) =>
-    # sys.puts err
-    # sys.puts body
-    # sys.puts response.toString()
+    throw err if err
     request.respond 200, body
 
 capitalize: (s) ->
   s.charAt(0).toUpperCase() + s.substring(1).toLowerCase()
+
+process.addListener 'uncaughtException', (err) ->
+  sys.puts "Uncaught Exception: ${err.toString()}"
 
 run(2560)

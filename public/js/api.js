@@ -87,6 +87,7 @@
     },
     googlemaps: function(text) {
       var geocoder, latlng, map, options;
+      $('#results').html('<div id="map"></div>');
       geocoder = new google.maps.Geocoder();
       latlng = new google.maps.LatLng(-34.397, 150.644);
       options = {
@@ -94,7 +95,7 @@
         center: latlng,
         mapTypeId: google.maps.MapTypeId.SATELLITE
       };
-      map = new google.maps.Map($('#results')[0], options);
+      map = new google.maps.Map($('#map')[0], options);
       return geocoder.geocode({
         address: text
       }, function(results, status) {
