@@ -2,8 +2,11 @@
   window.API = {
     services: {
       zemanta: {
-        box: 'Enter a block of text here, say an article from the New York Times, and see what Creative Commons images and related articles Zemanta could provide alongside.',
-        description: 'Zemanta is a service that finds names, locations, photos, links and other material based on a chunk of text.',
+        box: 'Enter a block of text here &mdash; for example, a portion \
+of a newspaper article &mdash; and see what Creative Commons \
+images and related articles Zemanta would provide alongside.',
+        description: 'Zemanta is a service that finds names, locations, photos, \
+links and other material based on a chunk of text.',
         mode: 'text'
       },
       truveo: {
@@ -13,27 +16,32 @@
       },
       opencongress: {
         box: 'Enter the last name of a Member of Congress:',
-        description: 'A general resource on Congress, produced by the Participatory Politics Foundation and the Sunlight Foundation.',
+        description: 'A general resource on Congress, produced by the Participatory \
+Politics Foundation and the Sunlight Foundation.',
         mode: 'line'
       },
       guardian: {
-        box: 'Enter anything that might appear in a story, and see what related articles the Guardian API would suggest.',
+        box: 'Enter anything that might appear in a story, and see what \
+related articles the Guardian API would suggest.',
         description: 'This API lets you mine The Guardian\'s article database.',
         mode: 'line'
       },
       oilreporter: {
         box: '',
-        description: 'Oil Reporter is a new effort to crowdsource oil sightings along the Gulf coast.',
+        description: 'Oil Reporter is a new effort to crowdsource oil sightings \
+along the Gulf coast.',
         mode: 'none'
       },
       twitter: {
-        box: 'Enter a term to search for on Twitter, and see what the community is saying about it.',
+        box: 'Enter a term to search for on Twitter, and see what the \
+community is saying about it.',
         description: 'How might you mine the Twitterverse? With Twitter\'s API.',
         mode: 'line'
       },
       googlemaps: {
         box: 'Enter a location to get a map:',
-        description: 'The Google Maps API is one of the oldest and most widely used APIs in existence.',
+        description: 'The Google Maps API is one of the oldest and most widely \
+used APIs in existence.',
         mode: 'gmaps line',
         custom: true
       }
