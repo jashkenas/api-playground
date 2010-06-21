@@ -6,7 +6,7 @@ task 'build', 'Build and watch the CoffeeScript source files', ->
   coffee.stdout.addListener 'data', (data) -> print data.toString()
 
 task 'deploy', 'Deploy to Linode', ->
-  exec "rsync -av --progress --inplace --rsh='ssh -p9977' . jashkenas@ashkenas.com:/home/jashkenas/sites/api_playground", ->
+  exec "rsync -av --progress --inplace --rsh='ssh -p9977' . jashkenas@ashkenas.com:/home/jashkenas/sites/api_playground", (err, stdout) ->
     puts "Deployed..."
-    exec "ssh -t -p 9977 jashkenas@ashkenas.com 'nohup node sites/api_playground/lib/app.js &; exit'", ->
+    exec "ssh -p 9977 jashkenas@ashkenas.com 'pkill -n node; EXPRESS_ENV=production nohup node sites/api_playground/lib/app.js > /var/log/node.log 2>&1 &'", (err, stdout, stderr) ->
       puts "Restarted..."
