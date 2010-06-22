@@ -12,12 +12,13 @@ configure ->
   set 'root', root_dir
 
 urls: {
-  zemanta      : "http://api.zemanta.com/services/rest/0.0"
-  truveo       : "http://xml.truveo.com/apiv3"
-  opencongress : "http://www.opencongress.org/api/people"
-  guardian     : "http://content.guardianapis.com/search"
-  oilreporter  : "http://oilreporter.org/reports.json"
-  twitter      : "http://search.twitter.com/search.json"
+  zemanta:      "http://api.zemanta.com/services/rest/0.0"
+  truveo:       "http://xml.truveo.com/apiv3"
+  opencongress: "http://www.opencongress.org/api/people"
+  guardian:     "http://content.guardianapis.com/search"
+  oilreporter:  "http://oilreporter.org/reports.json"
+  twitter:      "http://search.twitter.com/search.json"
+  freebase:     "http://www.freebase.com/api/service/search"
 }
 
 keys: JSON.parse fs.readFileSync(root_dir + '/config/keys.json').toString()
@@ -68,6 +69,11 @@ get '/api/guardian.json', ->
 get '/api/oilreporter.json', ->
   http.get urls.oilreporter, {
     api_key: keys.oilreporter
+  }, respond this
+
+get '/api/freebase.json', ->
+  http.get urls.freebase, {
+    query: @param 'text'
   }, respond this
 
 respond: (request) ->

@@ -44,6 +44,12 @@ community is saying about it.',
 used APIs in existence.',
         mode: 'gmaps line',
         custom: true
+      },
+      freebase: {
+        box: 'Enter a term to find with Freebase:',
+        description: 'Freebase is a centralized clearinghouse for linked data, \
+including all of Wikipedia.',
+        mode: 'line'
       }
     },
     initialize: function() {
@@ -88,10 +94,13 @@ used APIs in existence.',
       return $('#results').html(API.table(data));
     },
     fetch: function(api, value) {
-      $.getJSON(("/api/" + (api) + ".json"), {
+      $('#spinner').show();
+      return $.getJSON(("/api/" + (api) + ".json"), {
         text: value
-      }, API[("" + (api) + "Complete")]);
-      return $('#spinner').show();
+      }, function(response) {
+        $('#spinner').hide();
+        return API[("" + (api) + "Complete")](response);
+      });
     },
     googlemaps: function(text) {
       var geocoder, latlng, map, options;
@@ -122,7 +131,6 @@ used APIs in existence.',
     },
     zemantaComplete: function(response) {
       var articles, images, keywords;
-      $('#spinner').hide();
       images = {
         title: "Images",
         headers: ["Description", "Image"],
@@ -155,7 +163,6 @@ used APIs in existence.',
     },
     truveoComplete: function(response) {
       var videos;
-      $('#spinner').hide();
       if (!(response.response.data.results.videoSet.videos)) {
         return alert('No related videos were found.');
       }
@@ -172,7 +179,6 @@ used APIs in existence.',
     },
     opencongressComplete: function(response) {
       var articles, news, people;
-      $('#spinner').hide();
       if (!(response.people)) {
         return alert("No member of Congress by that name could be found.");
       }
@@ -209,7 +215,6 @@ used APIs in existence.',
     },
     guardianComplete: function(response) {
       var articles;
-      $('#spinner').hide();
       if (!(response.response.results.length)) {
         return alert("No related articles were found.");
       }
@@ -231,7 +236,6 @@ used APIs in existence.',
     },
     oilreporterComplete: function(response) {
       var reports;
-      $('#spinner').hide();
       reports = {
         title: "Reports",
         headers: ["Description", "Wildlife", "Oil", "Lat/Lng", "Date"],
@@ -245,7 +249,6 @@ used APIs in existence.',
     },
     twitterComplete: function(response) {
       var tweets;
-      $('#spinner').hide();
       tweets = {
         title: "Tweets",
         headers: ["User", "Picture", "Tweet"],
@@ -255,6 +258,31 @@ used APIs in existence.',
       };
       return API.render({
         tables: [tweets]
+      });
+    },
+    freebaseComplete: function(response) {
+      var results;
+      console.log(response);
+      results = {
+        title: "Results",
+        headers: ["Name", "Image", "Relevance", "Categories", "Link"],
+        rows: _.map(response.result, function(item) {
+          var pic, types, url;
+          types = _.map(item.type, function(el) {
+            return el.name;
+          });
+          url = "http://www.freebase.com/view" + item.id;
+          pic = "<img src='http://www.freebase.com/api/trans/image_thumb/guid/" + item.guid.substring(1) + "?maxwidth=150&maxheight=150' />";
+          return [
+            item.name, pic, item['relevance:score'], types.join(', '), {
+              url: url,
+              text: url
+            }
+          ];
+        })
+      };
+      return API.render({
+        tables: [results]
       });
     },
     table: _.template("<% _.each(tables, function(table) { %>\n  <h3><%= table.title %></h3>\n  <table>\n    <thead>\n      <tr>\n        <% _.each(table.headers, function(header) { %>\n          <th><%= header %></th>\n        <% }); %>\n      </tr>\n    </thead>\n    <tbody>\n      <% _.each(table.rows, function(row) { %>\n        <tr>\n          <% _.each(row, function(col) { %>\n            <td class=\"col\">\n            <% if (col && col.url) { %>\n              <a href=\"<%= col.url %>\" target=\"_blank\"><%= col.text %></a>\n            <% } else { %>\n              <%= col %>\n            <% } %>\n            </td>\n          <% }); %>\n        </tr>\n      <% }); %>\n    </tbody>\n  </table>\n<% }); %>")
