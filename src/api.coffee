@@ -1,5 +1,7 @@
+# Create our API namespace.
 window.API: {
 
+  # The list of APIs we connect to, with descriptions.
   services:  {
     zemanta: {
       box:          'Enter a block of text here &mdash; for example, a portion
@@ -53,12 +55,16 @@ window.API: {
     }
   }
 
+
+  # Initialize by binding to appropriate DOM events and loading the first API.
   initialize: ->
     $('#go').click API.go
     $('#picker').bind 'change', API.change
     $('#line').keypress (e) -> (API.go() if e.keyCode is 13)
     API.change 'guardian'
 
+
+  # Switch the view from one API to another.
   change: (service) ->
     service: if _.isString(service) then service else $('#picker').val()
     api: API.services[service]
@@ -69,23 +75,34 @@ window.API: {
     $('#results').html ''
     API.getInput().focus()
 
+
+  # Run a request against the current API.
   go: ->
     api:  $('#picker').val()
     text: API.getInput().val()
     if API.services[api].custom then API[api](text) else API.fetch api, text
 
+
+  # Get the appropriate input element (line or textarea) for the current API.
   getInput: ->
     if API.current.mode is 'text' then $('#text') else $('#line')
 
+
+  # Render the results of a successful API call.
   render: (data) ->
     $('#results').html API.table data
 
+
+  # Make a request to the remote API, proxied through our server.
   fetch: (api, value) ->
     $('#spinner').show()
     $.getJSON "/api/${api}.json", {text: value}, (response) ->
       $('#spinner').hide()
       API["${api}Complete"](response)
 
+
+  # Google Maps is a special case because we're using their JavaScript API.
+  # Work with it directly here.
   googlemaps: (text) ->
     $('#results').html '<div id="map"></div>'
     geocoder: new google.maps.Geocoder()
@@ -100,6 +117,8 @@ window.API: {
       else
         alert "Geocode was not successful for the following reason: $status"
 
+
+  # Process the JSON from Zemanta into tables.
   zemantaComplete: (response) ->
     images: {
       title:    "Images"
@@ -121,6 +140,8 @@ window.API: {
     }
     API.render {tables: [images, articles, keywords]}
 
+
+  # Process the JSON response from Truveo into tables.
   truveoComplete: (response) ->
     return alert 'No related videos were found.' unless response.response.data.results.videoSet.videos
     videos: {
@@ -131,6 +152,8 @@ window.API: {
     }
     API.render {tables: [videos]}
 
+
+  # Process the JSON response from OpenCongress into tables.
   opencongressComplete: (response) ->
     return alert "No member of Congress by that name could be found." unless response.people
     people: {
@@ -148,6 +171,8 @@ window.API: {
     }
     API.render {tables: [people, articles]}
 
+
+  # Process the JSON response from the Guardian into tables.
   guardianComplete: (response) ->
     return alert "No related articles were found." unless response.response.results.length
     articles: {
@@ -158,6 +183,8 @@ window.API: {
     }
     API.render {tables: [articles]}
 
+
+  # Process the JSON response from the OilReporter into tables.
   oilreporterComplete: (response) ->
     reports: {
       title:    "Reports"
@@ -167,6 +194,8 @@ window.API: {
     }
     API.render {tables:  [reports]}
 
+
+  # Process the JSON response from Twitter into tables.
   twitterComplete: (response) ->
     tweets: {
       title:    "Tweets"
@@ -176,6 +205,8 @@ window.API: {
     }
     API.render {tables:  [tweets]}
 
+
+  # Process the JSON response from Freebase into tables.
   freebaseComplete: (response) ->
     console.log response
     results: {
@@ -189,6 +220,8 @@ window.API: {
     }
     API.render {tables: [results]}
 
+
+  # Our EJS template for rendering a series of tables into HTML.
   table: _.template """
     <% _.each(tables, function(table) { %>
       <h3><%= table.title %></h3>
@@ -221,4 +254,5 @@ window.API: {
 
 }
 
+# Initialize the API on page load.
 $ API.initialize
