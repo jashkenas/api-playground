@@ -110,13 +110,15 @@ within a document, and connects them to the web of linked data.',
     },
     // Make a request to the remote API, proxied through our server.
     fetch: function(api, value) {
+      var success;
       $('#spinner').show();
-      return $.getJSON(("/api/" + (api) + ".json"), {
-        text: value
-      }, function(response) {
+      success = function(response) {
         $('#spinner').hide();
         return API[("" + (api) + "Complete")](response);
-      });
+      };
+      return $.post(("/api/" + (api) + ".json"), {
+        text: value
+      }, success, 'json');
     },
     // Google Maps is a special case because we're using their JavaScript API.
     // Work with it directly here.

@@ -41,7 +41,7 @@ get '/', ->
 
 
 # Call to the Twitter search API.
-get '/api/twitter.json', ->
+post '/api/twitter.json', ->
   http.get urls.twitter, {
     q:    @param('text')
     rpp:  50
@@ -49,7 +49,7 @@ get '/api/twitter.json', ->
 
 
 # Call to the Zemanta "suggest related content" API.
-get '/api/zemanta.json', ->
+post '/api/zemanta.json', ->
   http.post urls.zemanta, {
     api_key:  keys.zemanta
     method:   'zemanta.suggest'
@@ -59,7 +59,7 @@ get '/api/zemanta.json', ->
 
 
 # Call to the Truveo video search API.
-get '/api/truveo.json', ->
+post '/api/truveo.json', ->
   http.get urls.truveo, {
     appid:            keys.truveo
     method:           'truveo.videos.getVideos'
@@ -72,7 +72,7 @@ get '/api/truveo.json', ->
 
 
 # Call to the OpenCongress Senator and Representative lookup API.
-get '/api/opencongress.json', ->
+post '/api/opencongress.json', ->
   http.get urls.opencongress, {
     key:        keys.opencongress
     last_name:  capitalize @param 'text'
@@ -81,7 +81,7 @@ get '/api/opencongress.json', ->
 
 
 # Call to the Guardian article search API.
-get '/api/guardian.json', ->
+post '/api/guardian.json', ->
   http.get urls.guardian, {
     q:              @param 'text'
     'api-key':      keys.guardian
@@ -91,21 +91,21 @@ get '/api/guardian.json', ->
 
 
 # Call to the OilReporter beach reports API.
-get '/api/oilreporter.json', ->
+post '/api/oilreporter.json', ->
   http.get urls.oilreporter, {
     api_key: keys.oilreporter
   }, respond this
 
 
 # Call to the Freebase linked data search API.
-get '/api/freebase.json', ->
+post '/api/freebase.json', ->
   http.get urls.freebase, {
     query: @param 'text'
   }, respond this
 
 
 # Call to the OpenCalais entity extraction API.
-get '/api/calais.json', ->
+post '/api/calais.json', ->
   http.post urls.calais, {
     licenseID:  keys.calais
     content:    @param 'text'

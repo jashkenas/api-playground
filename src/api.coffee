@@ -103,10 +103,10 @@ window.API: {
   # Make a request to the remote API, proxied through our server.
   fetch: (api, value) ->
     $('#spinner').show()
-    $.getJSON "/api/${api}.json", {text: value}, (response) ->
+    success: (response) ->
       $('#spinner').hide()
       API["${api}Complete"](response)
-
+    $.post "/api/${api}.json", {text: value}, success, 'json'
 
   # Google Maps is a special case because we're using their JavaScript API.
   # Work with it directly here.
