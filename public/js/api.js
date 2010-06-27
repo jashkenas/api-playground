@@ -1,5 +1,8 @@
 (function(){
+  var __hasProp = Object.prototype.hasOwnProperty;
+  // Create our API namespace.
   window.API = {
+    // The list of APIs we connect to, with descriptions.
     services: {
       zemanta: {
         box: 'Enter a block of text here &mdash; for example, a portion \
@@ -50,8 +53,16 @@ used APIs in existence.',
         description: 'Freebase is a centralized clearinghouse for linked data, \
 including all of Wikipedia.',
         mode: 'line'
+      },
+      calais: {
+        box: 'Enter a block of text here &mdash; for example, a portion \
+of a newspaper article &mdash; to see what entities are extracted.',
+        description: 'OpenCalais finds entities (people, places, organizations, terms) \
+within a document, and connects them to the web of linked data.',
+        mode: 'text'
       }
     },
+    // Initialize by binding to appropriate DOM events and loading the first API.
     initialize: function() {
       $('#go').click(API.go);
       $('#picker').bind('change', API.change);
@@ -62,6 +73,7 @@ including all of Wikipedia.',
       });
       return API.change('guardian');
     },
+    // Switch the view from one API to another.
     change: function(service) {
       var api;
       service = _.isString(service) ? service : $('#picker').val();
@@ -73,6 +85,7 @@ including all of Wikipedia.',
       $('#results').html('');
       return API.getInput().focus();
     },
+    // Run a request against the current API.
     go: function() {
       var api, text;
       api = $('#picker').val();
@@ -83,6 +96,7 @@ including all of Wikipedia.',
         return API.fetch(api, text);
       }
     },
+    // Get the appropriate input element (line or textarea) for the current API.
     getInput: function() {
       if (API.current.mode === 'text') {
         return $('#text');
@@ -90,9 +104,11 @@ including all of Wikipedia.',
         return $('#line');
       }
     },
+    // Render the results of a successful API call.
     render: function(data) {
       return $('#results').html(API.table(data));
     },
+    // Make a request to the remote API, proxied through our server.
     fetch: function(api, value) {
       $('#spinner').show();
       return $.getJSON(("/api/" + (api) + ".json"), {
@@ -102,6 +118,8 @@ including all of Wikipedia.',
         return API[("" + (api) + "Complete")](response);
       });
     },
+    // Google Maps is a special case because we're using their JavaScript API.
+    // Work with it directly here.
     googlemaps: function(text) {
       var geocoder, latlng, map, options;
       $('#results').html('<div id="map"></div>');
@@ -129,6 +147,7 @@ including all of Wikipedia.',
         }
       });
     },
+    // Process the JSON from Zemanta into tables.
     zemantaComplete: function(response) {
       var articles, images, keywords;
       images = {
@@ -161,6 +180,7 @@ including all of Wikipedia.',
         tables: [images, articles, keywords]
       });
     },
+    // Process the JSON response from Truveo into tables.
     truveoComplete: function(response) {
       var videos;
       if (!(response.response.data.results.videoSet.videos)) {
@@ -177,6 +197,7 @@ including all of Wikipedia.',
         tables: [videos]
       });
     },
+    // Process the JSON response from OpenCongress into tables.
     opencongressComplete: function(response) {
       var articles, news, people;
       if (!(response.people)) {
@@ -213,6 +234,7 @@ including all of Wikipedia.',
         tables: [people, articles]
       });
     },
+    // Process the JSON response from the Guardian into tables.
     guardianComplete: function(response) {
       var articles;
       if (!(response.response.results.length)) {
@@ -234,6 +256,7 @@ including all of Wikipedia.',
         tables: [articles]
       });
     },
+    // Process the JSON response from the OilReporter into tables.
     oilreporterComplete: function(response) {
       var reports;
       reports = {
@@ -247,6 +270,7 @@ including all of Wikipedia.',
         tables: [reports]
       });
     },
+    // Process the JSON response from Twitter into tables.
     twitterComplete: function(response) {
       var tweets;
       tweets = {
@@ -260,9 +284,9 @@ including all of Wikipedia.',
         tables: [tweets]
       });
     },
+    // Process the JSON response from Freebase into tables.
     freebaseComplete: function(response) {
       var results;
-      console.log(response);
       results = {
         title: "Results",
         headers: ["Name", "Image", "Relevance", "Categories", "Link"],
@@ -285,7 +309,37 @@ including all of Wikipedia.',
         tables: [results]
       });
     },
+    // Process the JSON response from OpenCalais into tables.
+    calaisComplete: function(response) {
+      var _a, _b, _c, _d, hash, rows, sets, tables, title, val;
+      sets = {};
+      _a = response;
+      for (hash in _a) { if (__hasProp.call(_a, hash)) {
+        val = _a[hash];
+        if (('Category' === (_b = val._type) || 'Company' === _b || 'Organization' === _b || 'City' === _b || 'Person' === _b || 'IndustryTerm' === _b || 'NaturalFeature' === _b)) {
+          sets[val._type] = sets[val._type] || [];
+          sets[val._type].push([val.name, val.relevance, val.instances[0].detection]);
+        }
+      }}
+      tables = (function() {
+        _c = []; _d = sets;
+        for (title in _d) { if (__hasProp.call(_d, title)) {
+          rows = _d[title];
+          _c.push({
+            title: title,
+            headers: ["Name", "Relevance", "Occurrence"],
+            rows: rows
+          });
+        }}
+        return _c;
+      })();
+      return API.render({
+        tables: tables
+      });
+    },
+    // Our EJS template for rendering a series of tables into HTML.
     table: _.template("<% _.each(tables, function(table) { %>\n  <h3><%= table.title %></h3>\n  <table>\n    <thead>\n      <tr>\n        <% _.each(table.headers, function(header) { %>\n          <th><%= header %></th>\n        <% }); %>\n      </tr>\n    </thead>\n    <tbody>\n      <% _.each(table.rows, function(row) { %>\n        <tr>\n          <% _.each(row, function(col) { %>\n            <td class=\"col\">\n            <% if (col && col.url) { %>\n              <a href=\"<%= col.url %>\" target=\"_blank\"><%= col.text %></a>\n            <% } else { %>\n              <%= col %>\n            <% } %>\n            </td>\n          <% }); %>\n        </tr>\n      <% }); %>\n    </tbody>\n  </table>\n<% }); %>")
   };
+  // Initialize the API on page load.
   $(API.initialize);
 })();

@@ -53,6 +53,13 @@ window.API: {
                     including all of Wikipedia.'
       mode:         'line'
     }
+    calais: {
+      box:          'Enter a block of text here &mdash; for example, a portion
+                    of a newspaper article &mdash; to see what entities are extracted.'
+      description:  'OpenCalais finds entities (people, places, organizations, terms)
+                    within a document, and connects them to the web of linked data.'
+      mode:         'text'
+    }
   }
 
 
@@ -208,7 +215,6 @@ window.API: {
 
   # Process the JSON response from Freebase into tables.
   freebaseComplete: (response) ->
-    console.log response
     results: {
       title:    "Results"
       headers:  ["Name", "Image", "Relevance", "Categories", "Link"]
@@ -219,6 +225,17 @@ window.API: {
         [item.name, pic, item['relevance:score'], types.join(', '), {url, text: url}]
     }
     API.render {tables: [results]}
+
+
+  # Process the JSON response from OpenCalais into tables.
+  calaisComplete: (response) ->
+    sets: {}
+    for hash, val of response when val._type in ['Category', 'Company', 'Organization', 'City', 'Person', 'IndustryTerm', 'NaturalFeature']
+      sets[val._type]: or []
+      sets[val._type].push [val.name, val.relevance, val.instances[0].detection]
+    tables: for title, rows of sets
+      {title, headers: ["Name", "Relevance", "Occurrence"], rows}
+    API.render {tables}
 
 
   # Our EJS template for rendering a series of tables into HTML.

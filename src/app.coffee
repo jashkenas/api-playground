@@ -26,6 +26,7 @@ urls: {
   oilreporter:  "http://oilreporter.org/reports.json"
   twitter:      "http://search.twitter.com/search.json"
   freebase:     "http://www.freebase.com/api/service/search"
+  calais:       "http://api.opencalais.com/enlighten/rest"
 }
 
 
@@ -100,6 +101,20 @@ get '/api/oilreporter.json', ->
 get '/api/freebase.json', ->
   http.get urls.freebase, {
     query: @param 'text'
+  }, respond this
+
+
+# Call to the OpenCalais entity extraction API.
+get '/api/calais.json', ->
+  http.post urls.calais, {
+    licenseID:  keys.calais
+    content:    @param 'text'
+    paramsXML:  '''
+                <c:params xmlns:c="http://s.opencalais.com/1/pred/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                  <c:processingDirectives c:contentType="text/raw" c:outputFormat="application/json" c:docRDFaccesible="false" ></c:processingDirectives>
+                  <c:userDirectives c:allowDistribution="false" c:allowSearch="false" c:submitter="The API Playground"></c:userDirectives>
+                </c:params>
+                '''
   }, respond this
 
 
