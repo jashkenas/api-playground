@@ -231,7 +231,7 @@ window.API: {
   # Process the JSON response from OpenCalais into tables.
   calaisComplete: (response) ->
     sets: {}
-    for hash, val of response when val._type in ['Category', 'Company', 'Organization', 'City', 'Person', 'IndustryTerm', 'NaturalFeature']
+    for hash, val of response when val._type in ['Category', 'Company', 'Organization', 'City', 'Person', 'IndustryTerm', 'NaturalFeature', 'Country', 'Facility', 'Region', 'Product']
       sets[val._type]: or []
       sets[val._type].push [val.name, val.relevance, val.instances[0].detection]
     tables: for title, rows of sets

@@ -303,7 +303,7 @@ within a document, and connects them to the web of linked data.',
       _a = response;
       for (hash in _a) { if (__hasProp.call(_a, hash)) {
         val = _a[hash];
-        if (('Category' === (_b = val._type) || 'Company' === _b || 'Organization' === _b || 'City' === _b || 'Person' === _b || 'IndustryTerm' === _b || 'NaturalFeature' === _b)) {
+        if (('Category' === (_b = val._type) || 'Company' === _b || 'Organization' === _b || 'City' === _b || 'Person' === _b || 'IndustryTerm' === _b || 'NaturalFeature' === _b || 'Country' === _b || 'Facility' === _b || 'Region' === _b || 'Product' === _b)) {
           sets[val._type] = sets[val._type] || [];
           sets[val._type].push([val.name, val.relevance, val.instances[0].detection]);
         }
