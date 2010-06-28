@@ -105,6 +105,7 @@ window.API: {
     $('#spinner').show()
     success: (response) ->
       $('#spinner').hide()
+      console.log response if console?.log
       API["${api}Complete"](response)
     $.post "/api/${api}.json", {text: value}, success, 'json'
 

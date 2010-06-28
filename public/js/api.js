@@ -1,8 +1,6 @@
 (function(){
   var __hasProp = Object.prototype.hasOwnProperty;
-  // Create our API namespace.
   window.API = {
-    // The list of APIs we connect to, with descriptions.
     services: {
       zemanta: {
         box: 'Enter a block of text here &mdash; for example, a portion \
@@ -62,7 +60,6 @@ within a document, and connects them to the web of linked data.',
         mode: 'text'
       }
     },
-    // Initialize by binding to appropriate DOM events and loading the first API.
     initialize: function() {
       $('#go').click(API.go);
       $('#picker').bind('change', API.change);
@@ -73,7 +70,6 @@ within a document, and connects them to the web of linked data.',
       });
       return API.change('guardian');
     },
-    // Switch the view from one API to another.
     change: function(service) {
       var api;
       service = _.isString(service) ? service : $('#picker').val();
@@ -85,7 +81,6 @@ within a document, and connects them to the web of linked data.',
       $('#results').html('');
       return API.getInput().focus();
     },
-    // Run a request against the current API.
     go: function() {
       var api, text;
       api = $('#picker').val();
@@ -96,7 +91,6 @@ within a document, and connects them to the web of linked data.',
         return API.fetch(api, text);
       }
     },
-    // Get the appropriate input element (line or textarea) for the current API.
     getInput: function() {
       if (API.current.mode === 'text') {
         return $('#text');
@@ -104,24 +98,23 @@ within a document, and connects them to the web of linked data.',
         return $('#line');
       }
     },
-    // Render the results of a successful API call.
     render: function(data) {
       return $('#results').html(API.table(data));
     },
-    // Make a request to the remote API, proxied through our server.
     fetch: function(api, value) {
       var success;
       $('#spinner').show();
       success = function(response) {
         $('#spinner').hide();
+        if (typeof console === "undefined" || console == undefined ? undefined : console.log) {
+          console.log(response);
+        }
         return API[("" + (api) + "Complete")](response);
       };
       return $.post(("/api/" + (api) + ".json"), {
         text: value
       }, success, 'json');
     },
-    // Google Maps is a special case because we're using their JavaScript API.
-    // Work with it directly here.
     googlemaps: function(text) {
       var geocoder, latlng, map, options;
       $('#results').html('<div id="map"></div>');
@@ -145,11 +138,10 @@ within a document, and connects them to the web of linked data.',
             position: loc
           });
         } else {
-          return alert(("Geocode was not successful for the following reason: " + status));
+          return alert("Geocode was not successful for the following reason: " + status);
         }
       });
     },
-    // Process the JSON from Zemanta into tables.
     zemantaComplete: function(response) {
       var articles, images, keywords;
       images = {
@@ -182,7 +174,6 @@ within a document, and connects them to the web of linked data.',
         tables: [images, articles, keywords]
       });
     },
-    // Process the JSON response from Truveo into tables.
     truveoComplete: function(response) {
       var videos;
       if (!(response.response.data.results.videoSet.videos)) {
@@ -199,7 +190,6 @@ within a document, and connects them to the web of linked data.',
         tables: [videos]
       });
     },
-    // Process the JSON response from OpenCongress into tables.
     opencongressComplete: function(response) {
       var articles, news, people;
       if (!(response.people)) {
@@ -236,7 +226,6 @@ within a document, and connects them to the web of linked data.',
         tables: [people, articles]
       });
     },
-    // Process the JSON response from the Guardian into tables.
     guardianComplete: function(response) {
       var articles;
       if (!(response.response.results.length)) {
@@ -258,7 +247,6 @@ within a document, and connects them to the web of linked data.',
         tables: [articles]
       });
     },
-    // Process the JSON response from the OilReporter into tables.
     oilreporterComplete: function(response) {
       var reports;
       reports = {
@@ -272,7 +260,6 @@ within a document, and connects them to the web of linked data.',
         tables: [reports]
       });
     },
-    // Process the JSON response from Twitter into tables.
     twitterComplete: function(response) {
       var tweets;
       tweets = {
@@ -286,7 +273,6 @@ within a document, and connects them to the web of linked data.',
         tables: [tweets]
       });
     },
-    // Process the JSON response from Freebase into tables.
     freebaseComplete: function(response) {
       var results;
       results = {
@@ -311,7 +297,6 @@ within a document, and connects them to the web of linked data.',
         tables: [results]
       });
     },
-    // Process the JSON response from OpenCalais into tables.
     calaisComplete: function(response) {
       var _a, _b, _c, _d, hash, rows, sets, tables, title, val;
       sets = {};
@@ -339,9 +324,7 @@ within a document, and connects them to the web of linked data.',
         tables: tables
       });
     },
-    // Our EJS template for rendering a series of tables into HTML.
     table: _.template("<% _.each(tables, function(table) { %>\n  <h3><%= table.title %></h3>\n  <table>\n    <thead>\n      <tr>\n        <% _.each(table.headers, function(header) { %>\n          <th><%= header %></th>\n        <% }); %>\n      </tr>\n    </thead>\n    <tbody>\n      <% _.each(table.rows, function(row) { %>\n        <tr>\n          <% _.each(row, function(col) { %>\n            <td class=\"col\">\n            <% if (col && col.url) { %>\n              <a href=\"<%= col.url %>\" target=\"_blank\"><%= col.text %></a>\n            <% } else { %>\n              <%= col %>\n            <% } %>\n            </td>\n          <% }); %>\n        </tr>\n      <% }); %>\n    </tbody>\n  </table>\n<% }); %>")
   };
-  // Initialize the API on page load.
   $(API.initialize);
 })();
