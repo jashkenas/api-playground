@@ -48,8 +48,8 @@ used APIs in existence.',
       },
       freebase: {
         box: 'Enter a term to find with Freebase:',
-        description: 'Freebase is a centralized clearinghouse for linked data, \
-including all of Wikipedia.',
+        description: 'Freebase is a massive, collaboratively-edited database of \
+cross-linked data.',
         mode: 'line'
       },
       calais: {
