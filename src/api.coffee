@@ -68,7 +68,7 @@ window.API: {
     $('#go').click API.go
     $('#picker').bind 'change', API.change
     $('#line').keypress (e) -> (API.go() if e.keyCode is 13)
-    API.change 'guardian'
+    API.change 'freebase'
 
 
   # Switch the view from one API to another.

@@ -68,7 +68,7 @@ within a document, and connects them to the web of linked data.',
           return API.go();
         }
       });
-      return API.change('guardian');
+      return API.change('freebase');
     },
     change: function(service) {
       var api;
