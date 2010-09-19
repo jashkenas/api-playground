@@ -1,13 +1,13 @@
 # Load Express and Node.js modules we rely on.
 require 'express'
-http: require 'express/express/http'
-path: require 'path'
-sys:  require 'sys'
-fs:   require 'fs'
+http = require 'express/express/http'
+path = require 'path'
+sys  = require 'sys'
+fs   = require 'fs'
 
 
 # Determine the absolute path to the root directory of the app.
-root_dir: path.normalize __dirname + '/..'
+root_dir = path.normalize __dirname + '/..'
 
 
 # Configure Express.
@@ -18,7 +18,7 @@ configure ->
 
 
 # The list of remote URLs for the APIs that we hit.
-urls: {
+urls =
   zemanta:      "http://api.zemanta.com/services/rest/0.0"
   truveo:       "http://xml.truveo.com/apiv3"
   opencongress: "http://www.opencongress.org/api/people"
@@ -27,17 +27,17 @@ urls: {
   twitter:      "http://search.twitter.com/search.json"
   freebase:     "http://www.freebase.com/api/service/search"
   calais:       "http://api.opencalais.com/enlighten/rest"
-}
+
 
 
 # Load the API keys out of our secret keys.json file. Format is identical
 # to `urls`, above.
-keys: JSON.parse fs.readFileSync(root_dir + '/config/keys.json').toString()
+keys = JSON.parse fs.readFileSync(root_dir + '/config/keys.json').toString()
 
 
 # The ApiPlayground.org homepage.
 get '/', ->
-  @render 'index.html.ejs', {layout: no}
+  @render 'index.html.ejs', layout: no
 
 
 # Call to the Twitter search API.
@@ -119,20 +119,20 @@ post '/api/calais.json', ->
 
 
 # Create a function that defers the response to a given request.
-respond: (request) ->
+respond = (request) ->
   (err, body, response) =>
     throw err if err
     request.respond 200, body
 
 
 # Helper function to capitalize a word.
-capitalize: (s) ->
+capitalize = (s) ->
   s.charAt(0).toUpperCase() + s.substring(1).toLowerCase()
 
 
 # Catch and log any exceptions that may bubble to the top.
 process.addListener 'uncaughtException', (err) ->
-  sys.puts "Uncaught Exception: ${err.toString()}"
+  sys.puts "Uncaught Exception: #{err.toString()}"
 
 
 # Start the server.

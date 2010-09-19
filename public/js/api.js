@@ -1,13 +1,13 @@
-(function(){
+(function() {
   var __hasProp = Object.prototype.hasOwnProperty;
   window.API = {
     services: {
       zemanta: {
-        box: 'Enter a block of text here &mdash; for example, a portion \
-of a newspaper article &mdash; and see what Creative Commons \
-images and related articles Zemanta would provide alongside.',
-        description: 'Zemanta is a service that finds names, locations, photos, \
-links and other material based on a chunk of text.',
+        box: 'Enter a block of text here &mdash; for example, a portion\
+                    of a newspaper article &mdash; and see what Creative Commons\
+                    images and related articles Zemanta would provide alongside.',
+        description: 'Zemanta is a service that finds names, locations, photos,\
+                    links and other material based on a chunk of text.',
         mode: 'text'
       },
       truveo: {
@@ -17,46 +17,46 @@ links and other material based on a chunk of text.',
       },
       opencongress: {
         box: 'Enter the last name of a Member of Congress:',
-        description: 'A general resource on Congress, produced by the Participatory \
-Politics Foundation and the Sunlight Foundation.',
+        description: 'A general resource on Congress, produced by the Participatory\
+                    Politics Foundation and the Sunlight Foundation.',
         mode: 'line'
       },
       guardian: {
-        box: 'Enter anything that might appear in a story, and see what \
-related articles the Guardian API would suggest.',
+        box: 'Enter anything that might appear in a story, and see what\
+                    related articles the Guardian API would suggest.',
         description: 'This API lets you mine The Guardian\'s article database.',
         mode: 'line'
       },
       oilreporter: {
         box: '',
-        description: 'Oil Reporter is a new effort to crowdsource oil sightings \
-along the Gulf coast.',
+        description: 'Oil Reporter is a new effort to crowdsource oil sightings\
+                    along the Gulf coast.',
         mode: 'none'
       },
       twitter: {
-        box: 'Enter a term to search for on Twitter, and see what the \
-community is saying about it.',
+        box: 'Enter a term to search for on Twitter, and see what the\
+                    community is saying about it.',
         description: 'How might you mine the Twitterverse? With Twitter\'s API.',
         mode: 'line'
       },
       googlemaps: {
         box: 'Enter a location to get a map:',
-        description: 'The Google Maps API is one of the oldest and most widely \
-used APIs in existence.',
+        description: 'The Google Maps API is one of the oldest and most widely\
+                    used APIs in existence.',
         mode: 'gmaps line',
         custom: true
       },
       freebase: {
         box: 'Enter a term to find with Freebase:',
-        description: 'Freebase is a massive, collaboratively-edited database of \
-cross-linked data.',
+        description: 'Freebase is a massive, collaboratively-edited database of\
+                    cross-linked data.',
         mode: 'line'
       },
       calais: {
-        box: 'Enter a block of text here &mdash; for example, a portion \
-of a newspaper article &mdash; to see what entities are extracted.',
-        description: 'OpenCalais finds entities (people, places, organizations, terms) \
-within a document, and connects them to the web of linked data.',
+        box: 'Enter a block of text here &mdash; for example, a portion\
+                    of a newspaper article &mdash; to see what entities are extracted.',
+        description: 'OpenCalais finds entities (people, places, organizations, terms)\
+                    within a document, and connects them to the web of linked data.',
         mode: 'text'
       }
     },
@@ -85,18 +85,10 @@ within a document, and connects them to the web of linked data.',
       var api, text;
       api = $('#picker').val();
       text = API.getInput().val();
-      if (API.services[api].custom) {
-        return API[api](text);
-      } else {
-        return API.fetch(api, text);
-      }
+      return API.services[api].custom ? API[api](text) : API.fetch(api, text);
     },
     getInput: function() {
-      if (API.current.mode === 'text') {
-        return $('#text');
-      } else {
-        return $('#line');
-      }
+      return API.current.mode === 'text' ? $('#text') : $('#line');
     },
     render: function(data) {
       return $('#results').html(API.table(data));
@@ -106,12 +98,12 @@ within a document, and connects them to the web of linked data.',
       $('#spinner').show();
       success = function(response) {
         $('#spinner').hide();
-        if (typeof console === "undefined" || console == undefined ? undefined : console.log) {
+        if ((typeof console === "undefined" || console === null) ? undefined : console.log) {
           console.log(response);
         }
         return API[("" + (api) + "Complete")](response);
       };
-      return $.post(("/api/" + (api) + ".json"), {
+      return $.post("/api/" + (api) + ".json", {
         text: value
       }, success, 'json');
     },
@@ -138,7 +130,7 @@ within a document, and connects them to the web of linked data.',
             position: loc
           });
         } else {
-          return alert("Geocode was not successful for the following reason: " + status);
+          return alert("Geocode was not successful for the following reason: " + (status));
         }
       });
     },
@@ -148,7 +140,7 @@ within a document, and connects them to the web of linked data.',
         title: "Images",
         headers: ["Description", "Image"],
         rows: _.map(response.images, function(image) {
-          return [image.description, ("<img src='" + image.url_m + "' width='" + image.url_m_w + "' height='" + image.url_m_h + "' />")];
+          return [image.description, ("<img src='" + (image.url_m) + "' width='" + (image.url_m_w) + "' height='" + (image.url_m_h) + "' />")];
         })
       };
       articles = {
@@ -301,23 +293,25 @@ within a document, and connects them to the web of linked data.',
       var _a, _b, _c, _d, hash, rows, sets, tables, title, val;
       sets = {};
       _a = response;
-      for (hash in _a) { if (__hasProp.call(_a, hash)) {
+      for (hash in _a) {
+        if (!__hasProp.call(_a, hash)) continue;
         val = _a[hash];
         if (('Category' === (_b = val._type) || 'Company' === _b || 'Organization' === _b || 'City' === _b || 'Person' === _b || 'IndustryTerm' === _b || 'NaturalFeature' === _b || 'Country' === _b || 'Facility' === _b || 'Region' === _b || 'Product' === _b)) {
-          sets[val._type] = sets[val._type] || [];
+          sets[val._type] || (sets[val._type] = []);
           sets[val._type].push([val.name, val.relevance, val.instances[0].detection]);
         }
-      }}
+      }
       tables = (function() {
         _c = []; _d = sets;
-        for (title in _d) { if (__hasProp.call(_d, title)) {
+        for (title in _d) {
+          if (!__hasProp.call(_d, title)) continue;
           rows = _d[title];
           _c.push({
             title: title,
             headers: ["Name", "Relevance", "Occurrence"],
             rows: rows
           });
-        }}
+        }
         return _c;
       })();
       return API.render({

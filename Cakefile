@@ -1,10 +1,10 @@
-{print}:        require 'sys'
-{spawn, exec}: require 'child_process'
+{print}       = require 'sys'
+{spawn, exec} = require 'child_process'
 
 task 'build', 'Build and watch the CoffeeScript source files', ->
-  backend: spawn 'coffee', ['-cw', '-o', 'lib', 'src/app.coffee']
+  backend = spawn 'coffee', ['-cw', '-o', 'lib', 'src/app.coffee']
   backend.stdout.addListener 'data', (data) -> print data.toString()
-  frontend: spawn 'coffee', ['-cw', '-o', 'public/js', 'src/api.coffee']
+  frontend = spawn 'coffee', ['-cw', '-o', 'public/js', 'src/api.coffee']
   frontend.stdout.addListener 'data', (data) -> print data
 
 task 'deploy', 'Deploy to Linode', ->
